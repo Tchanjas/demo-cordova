@@ -18,7 +18,7 @@
  */
 var app = {
     // Application Constructor
-    initialize: function() {
+    initialize: function () {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     },
 
@@ -26,12 +26,12 @@ var app = {
     //
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
-    onDeviceReady: function() {
+    onDeviceReady: function () {
         this.receivedEvent('deviceready');
     },
 
     // Update DOM on a Received Event
-    receivedEvent: function(id) {
+    receivedEvent: function (id) {
         var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
@@ -44,3 +44,27 @@ var app = {
 };
 
 app.initialize();
+
+$('#getJSON').click(function () {
+    $.ajax({
+        type: "GET",
+        async: true,
+        cache: false,
+        dataType: "json",
+        url: "http://localhost:24939/api/paineltemporarioapi",
+        success: function (json) {
+            var data = JSON.parse(JSON.stringify(json));
+            $('#int').val(data[0].Id);
+            $('#str').val(data[0].localidade);
+
+            var date = new Date(data[0].dataSubmissao);
+            var day, month;
+
+            if (date.getMonth() < 10) { month = "0" + (date.getMonth() + 1) } else { month = (date.getMonth() + 1) };
+            if (date.getDate() < 10) { day = "0" + date.getDate(); } else { day = date.getDate(); };
+            var strDate = date.getFullYear() + '-' + month + '-' + day;
+
+            $('#dat').val(strDate);
+        }
+    });
+});
