@@ -23,16 +23,43 @@ app.initialize();
 $('#getJSON').click(function () {
     $.ajax({
         type: "GET",
-        async: true,
         cache: false,
         dataType: "json",
         url: "http://localhost:24939/api/paineltemporarioapi",
         success: function (json) {
             var data = JSON.parse(JSON.stringify(json));
             $(".getText").empty();
-            for(var i = 0; i < data.length; i++) {
+            for (var i = 0; i < data.length; i++) {
                 $(".getText").append("ID: " + data[i].Id + ", Localidade: " + data[i].localidade + ", Concelho: " + data[i].concelho + "<br>");
             }
+        }
+    });
+});
+
+
+$('#postJSON').click(function () {
+    $.ajax({
+        url: "http://localhost:24939/api/paineltemporarioapi",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "token": "1",
+            "localizacao": "Tomar",
+            "localidade": "Tomar",
+            "concelho": "Tomar",
+            "latitude": "1",
+            "longitude": "1",
+            "nAzulejosHorizontalPainel":"12", 
+            "nAzulejosVerticalPainel":"12", 
+            "estadoConservacao": "Excelente",
+            "foto": ["", "", "", ""]
+        }),
+        success: function(data){
+            console.log("Post OK");
+        },
+        error: function(data){
+            console.log("Post Error");
         }
     });
 });
